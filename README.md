@@ -76,6 +76,10 @@ npm run ui:test:e2e
 npm run ui:test:e2e:run
 ```
 
+### Generating test data
+
+[Faker](https://fakerjs.dev/) - Library to generate fake data.
+
 ## Converting to OutSystems
 
 Once development is complete, run:

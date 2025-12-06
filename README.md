@@ -44,6 +44,18 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
+## Testing
+
+[Vitest](https://vitest.dev/) - Test runner framework.
+
+- Run unit testing with interactive reload:
+```bash
+npm run test
+```
+- Run unit testing once:
+```bash
+npm run test:run
+```
 
 ## Converting to OutSystems
 

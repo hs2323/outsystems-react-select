@@ -3,7 +3,7 @@
 
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { defineConfig } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
   plugins: [
@@ -15,5 +15,9 @@ export default defineConfig({
     globals: true,
     environment: "happy-dom",
     setupFiles: ["test/setup-test-env.ts"],
+    exclude:[
+      ...configDefaults.exclude, 
+      'test/e2e/*'
+    ],
   },
 });

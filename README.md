@@ -48,6 +48,7 @@ All commands are run from the root of the project, from a terminal:
 
 [Vitest](https://vitest.dev/) - Test runner framework.
 
+### Unit and Integration Testing
 - Run unit and integraiton testing with interactive reload:
 ```bash
 npm run test
@@ -55,6 +56,24 @@ npm run test
 - Run unit and integration testing once:
 ```bash
 npm run test:run
+```
+
+### End-to-end testing
+- Install browsers
+```bash
+npm run test:e2e:install
+```
+
+- Run end-to-end testing with visual browser.
+
+```bash
+npm run ui:test:e2e
+```
+
+- Run end-to-end testing in the command line only.
+
+```bash
+npm run ui:test:e2e:run
 ```
 
 ## Converting to OutSystems

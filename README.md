@@ -48,11 +48,11 @@ All commands are run from the root of the project, from a terminal:
 
 [Vitest](https://vitest.dev/) - Test runner framework.
 
-- Run unit testing with interactive reload:
+- Run unit and integraiton testing with interactive reload:
 ```bash
 npm run test
 ```
-- Run unit testing once:
+- Run unit and integration testing once:
 ```bash
 npm run test:run
 ```

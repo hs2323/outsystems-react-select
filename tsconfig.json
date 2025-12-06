@@ -11,5 +11,8 @@
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "types": ["node", "vite/client", "vitest/globals"],
+    "paths": {
+      "~/*": ["./src/*"],
+    },
   }
 }

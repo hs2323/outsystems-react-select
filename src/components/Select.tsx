@@ -1,7 +1,5 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function ReactSelect() {
-	return (
-        <div>React Select</div>
-	);
+  return <div>React Select</div>;
 }

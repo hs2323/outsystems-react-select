@@ -1,4 +1,5 @@
 # OutSystems React Select
+
 OutSystems component for the [React Select](https://react-select.com) component.
 
 ## 🚀 Project Structure
@@ -19,15 +20,19 @@ OutSystems component for the [React Select](https://react-select.com) component.
 ```
 
 ### Pages
+
 Each page inside of the pages file should represent an Island that will be imported into OutSystems.
 
 ### Components
+
 The location of the component code.
 
 ### Images
+
 Any image assets.
 
 ### Styles
+
 Stylesheets that may apply to the component.
 
 ## 🧞 Commands
@@ -49,17 +54,23 @@ All commands are run from the root of the project, from a terminal:
 [Vitest](https://vitest.dev/) - Test runner framework.
 
 ### Unit and Integration Testing
+
 - Run unit and integraiton testing with interactive reload:
+
 ```bash
 npm run test
 ```
+
 - Run unit and integration testing once:
+
 ```bash
 npm run test:run
 ```
 
 ### End-to-end testing
+
 - Install browsers
+
 ```bash
 npm run test:e2e:install
 ```
@@ -80,9 +91,26 @@ npm run ui:test:e2e:run
 
 [Faker](https://fakerjs.dev/) - Library to generate fake data.
 
+## Format
+
+[Prettier](https://prettier.io/) - Opinionated code formatter.
+
+- Run the format check:
+
+```bash
+npm run format
+```
+
+- Fix any automatically fixable format issues:
+
+```bash
+npm run format:write
+```
+
 ## Converting to OutSystems
 
 Once development is complete, run:
+
 ```bash
 npm run output
 ```

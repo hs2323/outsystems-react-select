@@ -7,17 +7,15 @@ import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
   plugins: [
-    react(), 
+    react(),
     tsconfigPaths({
-      projects: ['tsconfig.json'],
-    })],
+      projects: ["tsconfig.json"],
+    }),
+  ],
   test: {
     globals: true,
     environment: "happy-dom",
     setupFiles: ["test/setup-test-env.ts"],
-    exclude:[
-      ...configDefaults.exclude, 
-      'test/e2e/*'
-    ],
+    exclude: [...configDefaults.exclude, "test/e2e/*"],
   },
 });

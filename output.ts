@@ -1,18 +1,79 @@
 import * as fs from "fs";
 import * as path from "path";
-import beautify from "js-beautify";
 import dotenv from "dotenv";
+import beautify from "js-beautify";
 dotenv.config();
 
 const { html: beautifyHtml } = beautify;
 
 /**
- * Extracts all <astro-island>...</astro-island> blocks from HTML.
+ * Recursively deletes a directory.
  */
-function keepAstroIslands(html: string): string {
-  const astroIslandRegex = /<astro-island\b[^>]*>[\s\S]*?<\/astro-island>/gi;
-  const islands = html.match(astroIslandRegex) || [];
-  return islands.join("\n");
+function clearDirectory(dir: string) {
+  if (!fs.existsSync(dir)) return;
+
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const entryPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      clearDirectory(entryPath);
+      fs.rmdirSync(entryPath);
+    } else {
+      fs.unlinkSync(entryPath);
+    }
+  }
+}
+
+/**
+ * Copies all .js files from dist/ to output/
+ */
+function copyAllJSFiles(inputDir: string, outputDir: string): void {
+  const jsFiles = getAllFilesWithExtension(inputDir, ".js");
+  if (jsFiles.length === 0) {
+    console.warn(`⚠️ No JavaScript files found in ${inputDir}`);
+    return;
+  }
+
+  for (const inputFile of jsFiles) {
+    const relativePath = path.relative(inputDir, inputFile);
+    const outputFile = path.join(outputDir, relativePath);
+
+    ensureDirExists(path.dirname(outputFile));
+    fs.copyFileSync(inputFile, outputFile);
+
+    console.log(`📜 Copied JS: ${relativePath}`);
+  }
+}
+
+/**
+ * Recursively copies a directory and its contents.
+ */
+function copyDirectory(src: string, dest: string) {
+  if (!fs.existsSync(src)) {
+    console.warn(`⚠️ Source directory not found: ${src}`);
+    return;
+  }
+
+  ensureDirExists(dest);
+
+  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    if (entry.isDirectory()) {
+      copyDirectory(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+}
+
+/**
+ * Ensures a directory exists before writing or copying.
+ */
+function ensureDirExists(dir: string) {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
 }
 
 function formatAstroIslandAttributes(html: string): string {
@@ -54,55 +115,6 @@ function getAllFilesWithExtension(dir: string, ext: string): string[] {
 }
 
 /**
- * Ensures a directory exists before writing or copying.
- */
-function ensureDirExists(dir: string) {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-}
-
-/**
- * Recursively deletes a directory.
- */
-function clearDirectory(dir: string) {
-  if (!fs.existsSync(dir)) return;
-
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const entryPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      clearDirectory(entryPath);
-      fs.rmdirSync(entryPath);
-    } else {
-      fs.unlinkSync(entryPath);
-    }
-  }
-}
-
-/**
- * Recursively copies a directory and its contents.
- */
-function copyDirectory(src: string, dest: string) {
-  if (!fs.existsSync(src)) {
-    console.warn(`⚠️ Source directory not found: ${src}`);
-    return;
-  }
-
-  ensureDirExists(dest);
-
-  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
-    const srcPath = path.join(src, entry.name);
-    const destPath = path.join(dest, entry.name);
-
-    if (entry.isDirectory()) {
-      copyDirectory(srcPath, destPath);
-    } else {
-      fs.copyFileSync(srcPath, destPath);
-    }
-  }
-}
-
-/**
  * Converts dist/foo/index.html → output/foo.html
  * Keeps dist/index.html as output/index.html
  */
@@ -120,6 +132,27 @@ function getFlattenedHtmlOutputPath(
   }
 
   return path.join(outputDir, relative);
+}
+
+/**
+ * Extracts all <astro-island>...</astro-island> blocks from HTML.
+ */
+function keepAstroIslands(html: string): string {
+  const astroIslandRegex = /<astro-island\b[^>]*>[\s\S]*?<\/astro-island>/gi;
+  const islands = html.match(astroIslandRegex) || [];
+  return islands.join("\n");
+}
+
+function prefixAssetPathsInFile(filePath: string) {
+  const ASSET_PATH = process.env.ASSET_PATH || "";
+  let content = fs.readFileSync(filePath, "utf-8");
+
+  // Replace "/assets/..." inside string literals with prefixed path
+  // Match quotes + /assets/ at start of string
+  content = content.replace(/(["'`])\/assets\//g, `$1/${ASSET_PATH}/`);
+
+  fs.writeFileSync(filePath, content, "utf-8");
+  console.log(`Prefixed asset paths in ${filePath}`);
 }
 
 /**
@@ -146,10 +179,10 @@ function processAllHTML(inputDir: string, outputDir: string): void {
     // Beautify / expand the HTML before writing
     const beautified = beautifyHtml(filtered, {
       indent_size: 2,
-      preserve_newlines: true,
       max_preserve_newlines: 1,
-      wrap_line_length: 120,
+      preserve_newlines: true,
       unformatted: ["code", "pre", "em", "strong"],
+      wrap_line_length: 120,
     });
 
     const prettyHtml = formatAstroIslandAttributes(beautified);
@@ -161,39 +194,6 @@ function processAllHTML(inputDir: string, outputDir: string): void {
       `✅ Processed HTML: ${path.relative(inputDir, inputFile)} → ${path.relative(outputDir, outputFile)}`,
     );
   }
-}
-
-/**
- * Copies all .js files from dist/ to output/
- */
-function copyAllJSFiles(inputDir: string, outputDir: string): void {
-  const jsFiles = getAllFilesWithExtension(inputDir, ".js");
-  if (jsFiles.length === 0) {
-    console.warn(`⚠️ No JavaScript files found in ${inputDir}`);
-    return;
-  }
-
-  for (const inputFile of jsFiles) {
-    const relativePath = path.relative(inputDir, inputFile);
-    const outputFile = path.join(outputDir, relativePath);
-
-    ensureDirExists(path.dirname(outputFile));
-    fs.copyFileSync(inputFile, outputFile);
-
-    console.log(`📜 Copied JS: ${relativePath}`);
-  }
-}
-
-function prefixAssetPathsInFile(filePath: string) {
-  const ASSET_PATH = process.env.ASSET_PATH || "";
-  let content = fs.readFileSync(filePath, "utf-8");
-
-  // Replace "/assets/..." inside string literals with prefixed path
-  // Match quotes + /assets/ at start of string
-  content = content.replace(/(["'`])\/assets\//g, `$1/${ASSET_PATH}/`);
-
-  fs.writeFileSync(filePath, content, "utf-8");
-  console.log(`Prefixed asset paths in ${filePath}`);
 }
 
 function processAllJsFiles(dir: string) {

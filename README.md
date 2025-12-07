@@ -107,6 +107,22 @@ npm run format
 npm run format:write
 ```
 
+## Lint
+
+[ESLint](https://eslint.org/) - Static code analyzer.
+
+- Run the lint checker:
+
+```bash
+npm run lint
+```
+
+- Fix any automatically fixable issues:
+
+```bash
+npm run lint:fix
+```
+
 ## Converting to OutSystems
 
 Once development is complete, run:

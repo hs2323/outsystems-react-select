@@ -106,6 +106,7 @@ const ReactSelect: React.FC<ReactSelectProps> = ({
     newValue: MultiValue<OptionType> | SingleValue<OptionType>,
   ) => {
     const newValues = Array.isArray(newValue) ? newValue : [newValue];
+    // @ts-expect-error TS2538 Ignore missing onSelectChange
     document[onSelectChange](JSON.stringify(newValues));
   };
   return (

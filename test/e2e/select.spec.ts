@@ -5,8 +5,8 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe("Visit Select control", () => {
-  test("Should have text", async ({ page }) => {
-    const textElement = page.locator("text=React Select");
-    await expect(textElement).toBeVisible();
+  test("Should have select control", async ({ page }) => {
+    const select = page.locator("role=combobox");
+    await expect(select).toBeVisible();
   });
 });

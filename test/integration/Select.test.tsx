@@ -1,10 +1,18 @@
-import { render, screen, waitFor } from "@testing-library/react";
-
+import { render, screen } from "@testing-library/react";
 import SelectComponent from "~/components/Select";
 
-test("Renders Home page", async () => {
-  render(<SelectComponent />);
+test("renders the React Select input", async () => {
+  render(
+    <SelectComponent
+      openMenuOnClick={true}
+      options={[
+        { label: "Chocolate", value: "chocolate" },
+        { label: "Strawberry", value: "strawberry" },
+      ]}
+    />,
+  );
 
-  await waitFor(() => screen.findByText("React Select"));
-  expect(screen.getByText("React Select")).toBeInTheDocument();
+  const input = await screen.findByRole("combobox");
+
+  expect(input).toBeInTheDocument();
 });

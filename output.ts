@@ -83,11 +83,11 @@ function formatAstroIslandAttributes(html: string): string {
     const decoded = attrs.replace(/&quot;/g, '""');
 
     // Split attributes by whitespace
-    const formattedAttrs = decoded
+    const formattedAttrs: string = decoded
       .trim()
       .split(/\s+/)
       .filter(Boolean)
-      .map((attr) => `  ${attr}`) // indent each attr
+      .map((attr: string): string => `  ${attr}`) // indent each attr
       .join("\n");
 
     return `<astro-island\n${formattedAttrs}>`;

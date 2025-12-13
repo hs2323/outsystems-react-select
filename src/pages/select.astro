@@ -1,4 +1,109 @@
 ---
-import SelectComponent from '../components/Select'
+import SelectComponent from '../components/Select';
+
+const ariaErrorMessage = "Aria error message example";
+const ariaInvalid = false;
+const ariaLabel = "Aria label example";
+const ariaLabelledBy = "abc123";
+const ariaLive = "polite";
+const autoFocus = false;
+const backspaceRemovesValue = false;
+const blurInputOnSelect = false;
+const captureMenuScroll = false;
+const className = "custom-select";
+const classNamePrefix = "custom-select-prefix";
+const closeMenuOnScroll = false;
+const closeMenuOnSelect = false;
+const controlShouldRenderValue = true;
+const defaultInputValue = undefined;
+const defaultMenuIsOpen = false;
+const defaultValue = { label: 'Strawberry', value: 'strawberry' };
+const delimiter = ', ';
+const escapeClearsValue = false;
+const form = "form-name";
+const hideSelectedOptions = false;
+const id = "select-id";
+const inputId = "select-input-id";
+const instanceId = "select-instance-id";
+const isClearable = false;
+const isDisabled = false;
+const isLoading = false;
+const isMulti = true;
+const isRtl = false;
+const isSearchable = false;
+const maxMenuHeight = 300;
+const menuPlacement = "auto";
+const menuPosition = "absolute";
+const menuShouldBlockScroll = false;
+const menuShouldScrollIntoView = false;
+const minMenuHeight = 140;
+const name = "select-name";
+const openMenuOnClick = false;
+const openMenuOnFocus = false;
+const options = [
+  { label: 'Chocolate', value: 'chocolate' },
+  { label: 'Strawberry', value: 'strawberry' },
+  { label: 'Vanilla', value: 'vanilla' }
+];
+const pageSize = 5;
+const required = false;
+const tabIndex = 0;
+const tabSelectsValue = false;
+const unstyled = false;
+const value = [{ label: 'Chocolate', value: 'chocolate' },{ label: 'Strawberry', value: 'strawberry' }];
 ---
-<SelectComponent client:only="react" />
+<script is:inline>
+    document.onSelectChange = (option) => {
+        console.log('Options selected: ', option);
+    };
+</script>
+<SelectComponent
+    ariaErrormessage={ariaErrorMessage}
+    ariaInvalid={ariaInvalid}
+    ariaLabel={ariaLabel}
+    ariaLabelledby={ariaLabelledBy}
+    ariaLive={ariaLive}
+    autoFocus={autoFocus}
+    backspaceRemovesValue={backspaceRemovesValue}
+    blurInputOnSelect={blurInputOnSelect}
+    captureMenuScroll={captureMenuScroll}
+    className={className}
+    classNamePrefix={classNamePrefix}
+    client:only="react"
+    closeMenuOnScroll={closeMenuOnScroll}
+    closeMenuOnSelect={closeMenuOnSelect}
+    controlShouldRenderValue={controlShouldRenderValue} 
+    defaultInputValue={defaultInputValue} 
+    defaultMenuIsOpen={defaultMenuIsOpen} 
+    defaultValue={defaultValue}
+    delimiter={delimiter}
+    escapeClearsValue={escapeClearsValue}
+    form={form}
+    hideSelectedOptions={hideSelectedOptions}
+    id={id}
+    inputId={inputId}
+    instanceId={instanceId}
+    isClearable={isClearable}
+    isDisabled={isDisabled}
+    isLoading={isLoading}
+    isMulti={isMulti}
+    isRtl={isRtl}
+    isSearchable={isSearchable}
+    maxMenuHeight={maxMenuHeight}
+    menuPlacement={menuPlacement}
+    menuPosition={menuPosition}
+    menuShouldBlockScroll={menuShouldBlockScroll}
+    menuShouldScrollIntoView={menuShouldScrollIntoView}
+    minMenuHeight={minMenuHeight}
+    name={name}
+    onSelectChange="onSelectChange"
+    openMenuOnClick={openMenuOnClick}
+    openMenuOnFocus={openMenuOnFocus}
+    options={options}
+    pageSize={pageSize}
+    required={required}
+    tabIndex={tabIndex}
+    tabSelectsValue={tabSelectsValue}
+    unstyled={unstyled}
+    value={value}
+   />

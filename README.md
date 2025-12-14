@@ -1,39 +1,6 @@
 # OutSystems React Select
 
-OutSystems component for the [React Select](https://react-select.com) component.
-
-## 🚀 Project Structure
-
-```text
-/
-├── public/
-├── src/
-│   └── components/
-│       └── Counter.tsx
-│   └── images/
-│       └── image.png
-│   └── pages/
-│       └── counter.astro
-│   └── styles/
-│       └── index.css
-└── package.json
-```
-
-### Pages
-
-Each page inside of the pages file should represent an Island that will be imported into OutSystems.
-
-### Components
-
-The location of the component code.
-
-### Images
-
-Any image assets.
-
-### Styles
-
-Stylesheets that may apply to the component.
+OutSystems component for the [React Select](https://react-select.com) library.
 
 ## 🧞 Commands
 
@@ -131,4 +98,4 @@ Once development is complete, run:
 npm run output
 ```
 
-This will create a set of files that will then need to be coverted to OutSystems components.
+The file outputs will then be added to the React Select component in OutSystems.

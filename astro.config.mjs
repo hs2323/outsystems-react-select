@@ -7,8 +7,7 @@ export default defineConfig({
   build: {
     inlineStylesheets: "always",
   },
-  integrations: [
-    react()],
+  integrations: [react()],
   server: {
     host: true,
     port: 4321,

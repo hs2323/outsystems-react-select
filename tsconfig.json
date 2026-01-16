@@ -5,6 +5,9 @@
   "compilerOptions": {
     "jsx": "preserve",
     "jsxImportSource": "react",
-    "types": ["node", "vitest/globals"]
+    "types": ["node", "vitest/globals"],
+    "paths": {
+      "~/*": ["./src/*"]
+    }
   }
 }

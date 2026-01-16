@@ -1,5 +1,5 @@
-import * as fs from "node:fs";
-import * as path from "node:path";
+import * as fs from "fs";
+import * as path from "path";
 import dotenv from "dotenv";
 import beautify from "js-beautify";
 dotenv.config();
@@ -83,11 +83,11 @@ function formatAstroIslandAttributes(html: string): string {
     const decoded = attrs.replace(/&quot;/g, '""');
 
     // Split attributes by whitespace
-    const formattedAttrs = decoded
+    const formattedAttrs: string = decoded
       .trim()
       .split(/\s+/)
       .filter(Boolean)
-      .map((attr: string) => `  ${attr}`) // indent each attr
+      .map((attr: string): string => `  ${attr}`) // indent each attr
       .join("\n");
 
     return `<astro-island\n${formattedAttrs}>`;
@@ -186,10 +186,9 @@ function processAllHTML(inputDir: string, outputDir: string): void {
     });
 
     const prettyHtml = formatAstroIslandAttributes(beautified);
-    const innerStringifiedHtml = stringifyAstroIslandContents(prettyHtml);
 
     ensureDirExists(path.dirname(outputFile));
-    fs.writeFileSync(outputFile, innerStringifiedHtml, "utf-8");
+    fs.writeFileSync(outputFile, prettyHtml, "utf-8");
 
     console.log(
       `✅ Processed HTML: ${path.relative(inputDir, inputFile)} → ${path.relative(outputDir, outputFile)}`,
@@ -245,38 +244,6 @@ function processOutput() {
   processAllJsFiles("output");
 
   console.log("✅ Done!");
-}
-
-/**
- * Stringifies the inner contents of astro-islands for exporting to OutSystems.
- * @param html
- * @returns
- */
-function stringifyAstroIslandContents(html: string): string {
-  return html.replace(
-    /(<astro-island\b[^>]*>)([\s\S]*?)(<\/astro-island>)/gi,
-    (_match, openTag, inner, closeTag) => {
-      const cleanedInner = inner.replace(/<!--\s*astro:end\s*-->/gi, "");
-
-      // Trim leading/trailing newlines
-      const trimmed = cleanedInner.replace(/^\s+|\s+$/g, "");
-
-      const lines = trimmed.split(/\r?\n/);
-
-      const stringified = lines
-        .map((line: string, index: number) => {
-          const escaped = line
-            .replace(/\\/g, "\\\\") // escape backslashes first
-            .replace(/"/g, '""'); // escape quotes
-
-          // No trailing + on the last line
-          return index === lines.length - 1 ? `"${escaped}"` : `"${escaped}" +`;
-        })
-        .join("\n");
-
-      return `${openTag}\n${stringified}\n${closeTag}`;
-    },
-  );
 }
 
 processOutput();

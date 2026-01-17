@@ -8,6 +8,21 @@ import { defineConfig, devices } from "@playwright/test";
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+function detectPackageManager() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (typeof (globalThis as any).Deno !== "undefined") return "deno";
+
+  const ua = process.env.npm_config_user_agent || "";
+
+  if (ua.startsWith("npm/")) return "npm";
+  if (ua.startsWith("yarn/")) return "yarn";
+  if (ua.startsWith("pnpm/")) return "pnpm";
+  if (ua.startsWith("bun/")) return "bun";
+
+  return "unknown";
+}
+const packageManager = detectPackageManager();
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
@@ -23,7 +38,6 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
 
-    /* Test against dekstop browsers. */
     // {
     //   name: 'firefox',
     //   use: { ...devices['Desktop Firefox'] },
@@ -70,9 +84,9 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: "npm run build && npm run preview",
+    command: `${packageManager} run build && ${packageManager} run preview`,
+    reuseExistingServer: !process.env.CI,
     url: "http://localhost:4321/select",
-    //reuseExistingServer: !process.env.CI,
   },
 
   /* Opt out of parallel tests on CI. */

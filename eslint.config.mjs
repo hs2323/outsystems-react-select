@@ -1,6 +1,7 @@
 import { fixupPluginRules } from "@eslint/compat";
 import pluginJs from "@eslint/js";
 import markdown from "@eslint/markdown";
+import angular from "angular-eslint";
 import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginAstro from "eslint-plugin-astro";
 import importPlugin from "eslint-plugin-import";
@@ -11,8 +12,16 @@ import playwright from "eslint-plugin-playwright";
 import pluginReact from "eslint-plugin-react";
 import pluginReactHooks from "eslint-plugin-react-hooks";
 import testingLibrary from "eslint-plugin-testing-library";
+import pluginVue from "eslint-plugin-vue";
 import globals from "globals";
 import tseslint from "typescript-eslint";
+
+// Fix for Bun and eslint-plugin-perfectionist.
+if (!Array.prototype.toSorted) {
+  Array.prototype.toSorted = function (compareFn) {
+    return [...this].sort(compareFn);
+  };
+}
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -24,11 +33,13 @@ export default [
       "output/*",
       "playwright-report/*",
       "tests-results/*",
+      "AGENTS.md",
+      "**.d.ts",
     ],
   },
   {
     ...playwright.configs["flat/recommended"],
-    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx,md}"],
+    files: ["test/e2e/**/*.{js,mjs,cjs,ts,jsx,tsx,md}"],
   },
   { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
   pluginJs.configs.recommended,
@@ -37,7 +48,10 @@ export default [
   {
     ...pluginReact.configs.flat.recommended,
     ...pluginReact.configs.flat["jsx-runtime"],
-    files: ["**/*.{js,ts,jsx,tsx}"],
+    files: [
+      "src/framework/react/**/*.{js,ts,jsx,tsx}",
+      "test/integration/react/**/*.{js,ts,jsx,tsx}",
+    ],
     settings: {
       react: {
         version: "detect",
@@ -97,8 +111,14 @@ export default [
     ...pluginJestDom.configs["flat/recommended"],
   },
   {
-    files: ["**/*.spec.{js,ts,jsx,tsx}", "**/*.test.{js,ts,jsx,tsx}"],
+    files: [
+      "test/integration/**/*.spec.{js,ts,jsx,tsx}",
+      "test/integration/**/*.test.{js,ts,jsx,tsx}",
+    ],
     ...testingLibrary.configs["flat/react"],
+    rules: {
+      "testing-library/no-await-sync-events": "off",
+    },
   },
   {
     files: ["**/*.md", "**/*.markdown"],
@@ -118,4 +138,34 @@ export default [
       "perfectionist/sort-imports": ["off"],
     },
   },
+  ...pluginVue.configs["flat/recommended"].map((config) => ({
+    ...config,
+    files: ["src/framework/vue/**/*.{js,ts,vue}"],
+    rules: {
+      ...config.rules,
+      "vue/html-self-closing": "off",
+      "vue/max-attributes-per-line": "off",
+      "vue/multi-word-component-names": "off",
+      "vue/singleline-html-element-content-newline": "off",
+    },
+  })),
+  {
+    files: ["**/*.vue"],
+    languageOptions: {
+      parser: pluginVue.parser,
+      parserOptions: {
+        extraFileExtensions: [".vue"],
+        parser: tseslint.parser,
+        sourceType: "module",
+      },
+    },
+  },
+  ...angular.configs.tsRecommended.map((config) => ({
+    ...config,
+    files: ["src/framework/angular/**/*.{ts,html}"],
+    rules: {
+      ...config.rules,
+      "@angular-eslint/no-input-rename": "off",
+    },
+  })),
 ];

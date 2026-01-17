@@ -6,6 +6,8 @@ OutSystems component for the [React Select](https://react-select.com) library.
 
 All commands are run from the root of the project, from a terminal:
 
+### npm
+
 | Command                   | Action                                           |
 | :------------------------ | :----------------------------------------------- |
 | `npm install`             | Installs dependencies                            |
@@ -42,21 +44,17 @@ npm run test:run
 npm run test:e2e:install
 ```
 
-- Run end-to-end testing with visual browser.
-
-```bash
-npm run ui:test:e2e
-```
-
 - Run end-to-end testing in the command line only.
 
 ```bash
-npm run ui:test:e2e:run
+npm run test:e2e:run
 ```
 
-### Generating test data
+- Run end-to-end testing with visual browser.
 
-[Faker](https://fakerjs.dev/) - Library to generate fake data.
+```bash
+npm run ui:test:e2e:ui
+```
 
 ## Format
 

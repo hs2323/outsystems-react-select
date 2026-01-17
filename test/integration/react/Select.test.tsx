@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import SelectComponent from "~/components/Select";
+import SelectComponent from "~/framework/react/Select";
 
 test("renders the React Select input", async () => {
   render(

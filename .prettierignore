@@ -1,8 +1,11 @@
-.astro/
 .github/
-.gitignore
+bun.lock
+deno.lock
 dist/
-output/
 node_modules/
-ui/playwright-report/
-ui/test-results/
+output/
+package-lock.json
+package.json
+patches/
+pnpm-lock.yaml
+yarn.lock

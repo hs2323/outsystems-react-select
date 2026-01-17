@@ -8,6 +8,10 @@ export default defineConfig({
     inlineStylesheets: "always",
   },
   integrations: [react()],
+  server: {
+    host: true,
+    port: 4321,
+  },
   vite: {
     build: {
       rollupOptions: {
@@ -16,12 +20,21 @@ export default defineConfig({
           chunkFileNames: `[name]_[hash].js`,
           entryFileNames: `[name]_[hash].js`,
           manualChunks: (id) => {
-            if (id.includes("node_modules") || id.includes("src")) {
+            if (id.includes("node_modules")) {
               return "app.js";
             }
-            return "app.js";
           },
         },
+      },
+    },
+    resolve: {
+      alias: {
+        fs: "node:fs",
+        http: "node:http",
+        https: "node:https",
+        os: "node:os",
+        path: "node:path",
+        url: "node:url",
       },
     },
   },

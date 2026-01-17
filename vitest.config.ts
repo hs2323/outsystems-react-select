@@ -1,21 +1,38 @@
-// <reference types="vitest" />
-/// <reference types="vite/client" />
-
+/// <reference types="vitest" />
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { configDefaults, defineConfig } from "vitest/config";
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tsconfigPaths({
-      projects: ["tsconfig.json"],
-    }),
-  ],
   test: {
-    environment: "happy-dom",
-    exclude: [...configDefaults.exclude, "test/e2e/*"],
-    globals: true,
-    setupFiles: ["test/setup-test-env.ts"],
+    projects: [
+      {
+        plugins: [
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          react() as any,
+          tsconfigPaths({
+            projects: ["tsconfig.json"],
+          }),
+        ],
+
+        test: {
+          environment: "happy-dom",
+          globals: true,
+          include: ["test/integration/react/**/*.test.tsx"],
+          name: "react",
+          setupFiles: ["test/setup-test-env.ts"],
+        },
+      },
+      {
+        test: {
+          environment: "node",
+          globals: true,
+          include: ["**/*.test.ts"],
+          name: "unit",
+          root: "./test/unit",
+        },
+      },
+    ],
+    reporters: ["default"],
   },
 });

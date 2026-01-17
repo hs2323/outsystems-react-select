@@ -1,6 +1,7 @@
 {
-  "name": "create-outsystems-astro",
+  "name": "outsystems-react-select",
   "type": "module",
+  "version": "0.1.0",
   "scripts": {
     "astro": "astro",
     "build": "astro build",

@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
 - Converted to Create OutSystems Astro v0.4.0.
 
 ### Security
+
 - Updated template dependency tar to 7.5.3 due to CVE-2026-23745.
 
 ## [0.1.0] - 2025-12-14

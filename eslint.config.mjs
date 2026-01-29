@@ -1,7 +1,6 @@
 import { fixupPluginRules } from "@eslint/compat";
 import pluginJs from "@eslint/js";
 import markdown from "@eslint/markdown";
-import angular from "angular-eslint";
 import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginAstro from "eslint-plugin-astro";
 import importPlugin from "eslint-plugin-import";
@@ -12,7 +11,6 @@ import playwright from "eslint-plugin-playwright";
 import pluginReact from "eslint-plugin-react";
 import pluginReactHooks from "eslint-plugin-react-hooks";
 import testingLibrary from "eslint-plugin-testing-library";
-import pluginVue from "eslint-plugin-vue";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -138,34 +136,4 @@ export default [
       "perfectionist/sort-imports": ["off"],
     },
   },
-  ...pluginVue.configs["flat/recommended"].map((config) => ({
-    ...config,
-    files: ["src/framework/vue/**/*.{js,ts,vue}"],
-    rules: {
-      ...config.rules,
-      "vue/html-self-closing": "off",
-      "vue/max-attributes-per-line": "off",
-      "vue/multi-word-component-names": "off",
-      "vue/singleline-html-element-content-newline": "off",
-    },
-  })),
-  {
-    files: ["**/*.vue"],
-    languageOptions: {
-      parser: pluginVue.parser,
-      parserOptions: {
-        extraFileExtensions: [".vue"],
-        parser: tseslint.parser,
-        sourceType: "module",
-      },
-    },
-  },
-  ...angular.configs.tsRecommended.map((config) => ({
-    ...config,
-    files: ["src/framework/angular/**/*.{ts,html}"],
-    rules: {
-      ...config.rules,
-      "@angular-eslint/no-input-rename": "off",
-    },
-  })),
 ];

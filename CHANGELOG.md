@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Security
+### Removed
 
-- Updated template sub-dependency tar to 7.5.6 due to CVE-2026-23950.
+- Removed Angular and Vue configurations.
 
 ## [0.1.1] - 2026-01-18
 

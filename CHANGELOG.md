@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed Angular and Vue configurations.
 
+### Security
+
+- Updated sub-dependency ajv@8 to 8.18.0 due to CVE-2025-69873.
+- Updated sub-dependency ajv@6 to 6.14.0 due to CVE-2025-69873.
+
 ## [0.1.1] - 2026-01-18
 
 ### Added

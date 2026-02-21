@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Updated sub-dependency devalue to 5.6.3 due to GHSA-33hq-fvwr-56pm.
 - Updated sub-dependency ajv@8 to 8.18.0 due to CVE-2025-69873.
 - Updated sub-dependency ajv@6 to 6.14.0 due to CVE-2025-69873.
 

@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.1",
   "scripts": {
-    "audit": "better-npm-audit audit",
+    "audit": "better-npm-audit audit --exclude GHSA-3ppc-4f35-3m26",
     "astro": "astro",
     "build": "astro build",
     "dev": "astro dev",

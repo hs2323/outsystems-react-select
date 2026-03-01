@@ -13,8 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated vitest to  4.0.18.
-- Updated vite-tsconfig-paths to  6.1.1.
+- Updated vitest to 4.0.18.
+- Updated vite-tsconfig-paths to 6.1.1.
 - Updated typescript-eslint to 8.56.1.
 - Updated react to 19.2.4.
 - Updated prettier to 3.8.1.
@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated @types/react to 19.2.14.
 - Updated @types/node to 25.3.3.
 - Updated @testing-library/react to 16.3.2.
-- Updated @playwright/test to  1.58.2.
+- Updated @playwright/test to 1.58.2.
 - Updated @eslint/js to 9.39.3.
 - Updated @eslint/compat to 2.0.2.
 

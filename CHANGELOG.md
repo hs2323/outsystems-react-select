@@ -11,6 +11,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added better-npm-audit for npm auditing.
 
+### Changed
+
+- Updated vitest to 4.0.18.
+- Updated vite-tsconfig-paths to 6.1.1.
+- Updated typescript-eslint to 8.56.1.
+- Updated react to 19.2.4.
+- Updated prettier to 3.8.1.
+- Updated happy-dom to 20.7.0.
+- Updated globals to 17.4.0.
+- Updated eslint-plugin-testing-library to 7.16.0.
+- Updated eslint-plugin-playwright to 2.8.0.
+- Updated eslint-plugin-perfectionist to 5.6.0.
+- Updated eslint-plugin-jest to 29.15.0.
+- Updated eslint-plugin-astro to 1.6.0.
+- Updated eslint to 9.39.3.
+- Updated dotenv to 17.3.1.
+- Updated astro to 5.18.0.
+- Updated @vitejs/plugin-react to 5.1.4.
+- Updated @types/react to 19.2.14.
+- Updated @types/node to 25.3.3.
+- Updated @testing-library/react to 16.3.2.
+- Updated @playwright/test to 1.58.2.
+- Updated @eslint/js to 9.39.3.
+- Updated @eslint/compat to 2.0.2.
+
 ### Removed
 
 - Removed Angular and Vue configurations.

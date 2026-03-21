@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- Updated sub-dependency flatted to 3.4.1 due to CVE-2026-32141.
+- Updated sub-dependency h3 to 1.15.9 due to CVE-2026-33128.
+- Updated sub-dependency flatted to 3.4.2 due to CVE-2026-33128.
 - Updated sub-dependency devalue to 5.6.4 due to CVE-2026-30226.
 - Updated sub-dependency svgo to 4.0.1 due to CVE-2026-29074.
 

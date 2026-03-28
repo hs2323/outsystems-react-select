@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Updated sub-dependency yaml to 1.10.3 and 2.8.3 due to CVE-2026-33532.
+- Updated sub-dependency smol-toml to 1.6.1 due to GHSA-v3rj-xjv7-4jmq.
+- Updated sub-dependency picomatch to 2.3.2 and 4.0.4 due to CVE-2026-33672.
+- Updated dependency happy-dom to 20.8.8 due to CVE-2026-33943.
+- Updated sub-dependency brace-expansion to 1.1.13, 2.0.3 and 5.0.5 due to CVE-2026-33750.
+- Updated dependency astro to 5.18.1 due to CVE-2026-33769.
 - Updated sub-dependency h3 to 1.15.9 due to CVE-2026-33128.
 - Updated sub-dependency flatted to 3.4.2 due to CVE-2026-33128.
 - Updated sub-dependency devalue to 5.6.4 due to CVE-2026-30226.

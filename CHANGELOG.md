@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Updated sub-dependency defu to 6.1.6 due to CVE-2026-35209.
 - Updated sub-dependency yaml to 1.10.3 and 2.8.3 due to CVE-2026-33532.
 - Updated sub-dependency smol-toml to 1.6.1 due to GHSA-v3rj-xjv7-4jmq.
 - Updated sub-dependency picomatch to 2.3.2 and 4.0.4 due to CVE-2026-33672.

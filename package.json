@@ -64,5 +64,8 @@
     "typescript-eslint": "^8.53.0",
     "vite-tsconfig-paths": "^6.0.4",
     "vitest": "^4.0.17"
+  },
+  "overrides": {
+    "defu": "^6.1.5"
   }
 }

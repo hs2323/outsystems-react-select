@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- Updated sub-dependency vite to 6.42. and 7.3.2 due to CVE-2026-39363, CVE-2026-39364 and CVE-2026-39365.
 - Updated sub-dependency defu to 6.1.6 due to CVE-2026-35209.
 - Updated sub-dependency yaml to 1.10.3 and 2.8.3 due to CVE-2026-33532.
 - Updated sub-dependency smol-toml to 1.6.1 due to GHSA-v3rj-xjv7-4jmq.

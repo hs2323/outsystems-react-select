@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Updated sub-dependency postcss due to CVE-2026-41305.
 - Patched dependency astro due to CVE-2026-41067.
 - Added dependency patch-package.
 

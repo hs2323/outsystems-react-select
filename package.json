@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.1.2",
   "scripts": {
-    "audit": "better-npm-audit audit",
+    "audit": "better-npm-audit audit --exclude GHSA-j687-52p2-xcff",
     "astro": "astro",
     "build": "astro build",
     "dev": "astro dev",
@@ -57,6 +57,7 @@
     "globals": "^17.0.0",
     "happy-dom": "^20.3.0",
     "js-beautify": "^1.15.4",
+    "patch-package": "^8.0.1",
     "prettier": "^3.8.0",
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",

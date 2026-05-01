@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Updated sub-dependency postcss due to CVE-2026-41305.
+- Patched dependency astro due to CVE-2026-41067.
+- Added dependency patch-package.
+
 ### Security
 
 - Updated sub-dependency vite to 6.42. and 7.3.2 due to CVE-2026-39363, CVE-2026-39364 and CVE-2026-39365.

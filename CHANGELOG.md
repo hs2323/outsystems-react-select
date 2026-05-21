@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Updated sub-dependency ws to 8.20.1 due to CVE-2026-45736.
+- Updated sub-dependency fast-uri to 3.1.2 due to CVE-2026-6321 and CVE-2026-6322.
+- Updated sub-dependency devalue to 5.8.1 due to CVE-2026-42570.
 - Updated dependency vitest to 4.1.7.
 - Updated dependency typescript-eslint to 8.59.4.
 - Updated dependency react-dom to 19.2.6.

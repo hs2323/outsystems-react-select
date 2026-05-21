@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated dependency eslint to 9.39.4.
 - Updated dependency dotenv to 17.4.2.
 - Updated dependency astro to 6.3.6.
-- Updated dependency @vitejs/plugin-react to 6.0.2.
+- Updated dependency @vitejs/plugin-react to 5.2.0.
 - Updated dependency @types/react to 19.2.15.
 - Updated dependency @types/node to 25.9.1.
 - Updated dependency @playwright/test to 1.60.0.

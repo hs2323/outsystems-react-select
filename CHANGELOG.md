@@ -7,10 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Updated dependency vitest to 4.1.7.
+- Updated dependency typescript-eslint to 8.59.4.
+- Updated dependency react-dom to 19.2.6.
+- Updated dependency react to 19.2.6.
+- Updated dependency prettier to 3.8.3.
+- Updated dependency happy-dom to 20.9.0.
+- Updated dependency globals to 17.6.0.
+- Updated dependency eslint-plugin-testing-library to 7.16.2.
+- Updated dependency eslint-plugin-react-hooks to 7.1.1.
+- Updated dependency eslint-plugin-playwright to 2.10.4.
+- Updated dependency eslint-plugin-perfectionist to 5.9.0.
+- Updated dependency eslint-plugin-jest to 29.15.2.
+- Updated dependency eslint-plugin-astro to 1.7.0.
+- Updated dependency eslint to 9.39.4.
+- Updated dependency dotenv to 17.4.2.
+- Updated dependency astro to 6.3.6.
+- Updated dependency @vitejs/plugin-react to 6.0.2.
+- Updated dependency @types/react to 19.2.15.
+- Updated dependency @types/node to 25.9.1.
+- Updated dependency @playwright/test to 1.60.0.
+- Updated dependency @eslint/markdown to 8.0.2.
+- Updated dependency @eslint/js to 9.39.4.
+- Updated dependency @eslint/compat to 2.1.0.
+- Updated dependency @astrojs/react to 5.0.5.
+
 ### Added
 
-- Updated sub-dependency postcss due to CVE-2026-41305.
-- Patched dependency astro due to CVE-2026-41067.
 - Added dependency patch-package.
 
 ### Security

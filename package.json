@@ -1,7 +1,7 @@
 {
   "name": "outsystems-react-select",
   "type": "module",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "scripts": {
     "audit": "better-npm-audit audit --exclude GHSA-j687-52p2-xcff",
     "astro": "astro",

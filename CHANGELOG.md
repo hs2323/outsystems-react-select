@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added dependency patch-package.
+
 ### Changed
 
 - Updated sub-dependency ws to 8.20.1 due to CVE-2026-45736.
@@ -37,12 +41,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated dependency @eslint/compat to 2.1.0.
 - Updated dependency @astrojs/react to 5.0.5.
 
-### Added
-
-- Added dependency patch-package.
-
 ### Security
 
+- Updated sub-dependency js-cookie to 3.0.7 due to CVE-2026-46625.
 - Updated sub-dependency vite to 6.42. and 7.3.2 due to CVE-2026-39363, CVE-2026-39364 and CVE-2026-39365.
 - Updated sub-dependency defu to 6.1.6 due to CVE-2026-35209.
 - Updated sub-dependency yaml to 1.10.3 and 2.8.3 due to CVE-2026-33532.

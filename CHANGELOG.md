@@ -7,10 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Updated dependency vitest to 4.1.8.
+- Updated dependency typescript-eslint to 8.61.0.
+- Updated dependency react-dom 19.2.7.
+- Updated dependency react to 19.2.7.
+- Updated dependency prettier to 3.8.4.
+- Updated dependency happy-dom to 20.10.3.
+- Updated dependency @vitejs/plugin-react to 6.0.2.
+- Updated dependency @types/react to 19.2.17.
+- Updated dependency @types/node to 25.9.3.
+- Updated dependency @astrojs/react to 5.0.7.
+
 ### Security
 
+- Updated dependency astro to 6.4.6 due to CVE-2026-54298.
 - Set node modules minimum age to 7 days.
-- Updated sub-dependency tmp to 0.2.7.
 - Updated sub-dependency esbuild to 0.28.1.
 
 ## [0.2.0] - 2026-05-21

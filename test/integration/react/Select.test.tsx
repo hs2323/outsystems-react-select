@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import SelectComponent from "~/framework/react/Select";
+import SelectComponent from "../../../src/framework/react/Select";
 
 const options = [
   { label: "Chocolate", value: "chocolate" },

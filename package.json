@@ -1,6 +1,7 @@
 {
   "name": "create-outsystems-astro",
   "type": "module",
+  "version": "0.3.0",
   "scripts": {
     "astro": "astro",
     "audit": "better-npm-audit audit",

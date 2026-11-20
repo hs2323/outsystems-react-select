@@ -6,7 +6,6 @@ import eslintPluginAstro from "eslint-plugin-astro";
 import importPlugin from "eslint-plugin-import-x";
 import pluginJest from "eslint-plugin-jest";
 import pluginJestDom from "eslint-plugin-jest-dom";
-import { configs as litConfigs } from "eslint-plugin-lit";
 import perfectionist from "eslint-plugin-perfectionist";
 import playwright from "eslint-plugin-playwright";
 // import pluginReact from "eslint-plugin-react";
@@ -14,8 +13,6 @@ import pluginReactHooks from "eslint-plugin-react-hooks";
 import testingLibrary from "eslint-plugin-testing-library";
 import globals from "globals";
 import tseslint from "typescript-eslint";
-
-import svelteConfig from "./svelte.config.js";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -140,28 +137,6 @@ export default [
   {
     rules: {
       "perfectionist/sort-imports": ["off"],
-    },
-  },
-  ...pluginVue.configs["flat/recommended"].map((config) => ({
-    ...config,
-    files: ["src/framework/vue/**/*.{js,ts,vue}"],
-    rules: {
-      ...config.rules,
-      "vue/html-self-closing": "off",
-      "vue/max-attributes-per-line": "off",
-      "vue/multi-word-component-names": "off",
-      "vue/singleline-html-element-content-newline": "off",
-    },
-  })),
-  {
-    files: ["**/*.vue"],
-    languageOptions: {
-      parser: pluginVue.parser,
-      parserOptions: {
-        extraFileExtensions: [".vue"],
-        parser: tseslint.parser,
-        sourceType: "module",
-      },
     },
   },
   {

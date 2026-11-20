@@ -6,11 +6,7 @@ import { defineConfig } from "astro/config";
 // nanostores, go to the shared "app" chunk.
 /** @type {Record<string, (string | RegExp)[]>} */
 const frameworkChunks = {
-  react: [
-    "react",
-    "react-dom",
-    "scheduler",
-    "@astrojs/react"],
+  react: ["react", "react-dom", "scheduler", "@astrojs/react"],
 };
 
 /**
@@ -41,9 +37,10 @@ export default defineConfig({
     inlineStylesheets: "always",
   },
   integrations: [
-react({
+    react({
       include: ["src/framework/react/*"],
-    })],
+    }),
+  ],
   server: {
     host: true,
     port: 4321,
@@ -70,7 +67,8 @@ react({
         outputOptions(options) {
           return { ...options, hashCharacters: "base36" };
         },
-      }],
+      },
+    ],
     resolve: {
       alias: {
         fs: "node:fs",

@@ -251,7 +251,7 @@ const value = [{ label: 'Chocolate', value: 'chocolate' },{ label: 'Strawberry',
             <p>Changes flow both ways between the host page and the island.</p>
         </header>
         <div class="demo-grid">
-            <section class="panel panel-host" aria-labelledby="host-title">
+            <section aria-labelledby="host-title" class="panel panel-host">
                 <div class="panel-heading">
                     <span class="badge badge-host">Host</span>
                     <h2 id="host-title">OutSystems simulation</h2>
@@ -260,21 +260,21 @@ const value = [{ label: 'Chocolate', value: 'chocolate' },{ label: 'Strawberry',
                     <div class="field">
                         <span class="field-label">Set value from host</span>
                         <div class="button-row">
-                            <button class="btn" id="host-set-vanilla" type="button" onclick="window.setSelectValue([{ label: 'Vanilla', value: 'vanilla' }])">Vanilla</button>
-                            <button class="btn" id="host-set-all" type="button" onclick="window.setSelectValue([{ label: 'Chocolate', value: 'chocolate' }, { label: 'Strawberry', value: 'strawberry' }, { label: 'Vanilla', value: 'vanilla' }])">All</button>
-                            <button class="btn btn-ghost" id="host-clear" type="button" onclick="window.setSelectValue([])">Clear</button>
+                            <button class="btn" id="host-set-vanilla" onclick="window.setSelectValue([{ label: 'Vanilla', value: 'vanilla' }])" type="button">Vanilla</button>
+                            <button class="btn" id="host-set-all" onclick="window.setSelectValue([{ label: 'Chocolate', value: 'chocolate' }, { label: 'Strawberry', value: 'strawberry' }, { label: 'Vanilla', value: 'vanilla' }])" type="button">All</button>
+                            <button class="btn btn-ghost" id="host-clear" onclick="window.setSelectValue([])" type="button">Clear</button>
                         </div>
                     </div>
                     <div class="field">
                         <span class="field-label">Received from island</span>
-                        <div class="chips" id="host-received-chips" aria-live="polite">
+                        <div aria-live="polite" class="chips" id="host-received-chips">
                             <span class="chips-empty">Nothing yet. Change the selection.</span>
                         </div>
                         <pre class="payload"><code id="host-received"></code></pre>
                     </div>
                 </div>
             </section>
-            <section class="panel panel-island" aria-labelledby="island-title">
+            <section aria-labelledby="island-title" class="panel panel-island">
                 <div class="panel-heading">
                     <span class="badge badge-island">Island</span>
                     <h2 id="island-title">React component</h2>

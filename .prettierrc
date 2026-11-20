@@ -1,0 +1,4 @@
+{
+    "plugins": ["prettier-plugin-svelte", "prettier-plugin-ember-template-tag", "prettier-plugin-marko"],
+    "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }]
+}

@@ -1,31 +1,37 @@
 import { fixupPluginRules } from "@eslint/compat";
 import pluginJs from "@eslint/js";
 import markdown from "@eslint/markdown";
+import angular from "angular-eslint";
+// import preactConfig from "eslint-config-preact";
 import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginAstro from "eslint-plugin-astro";
-import importPlugin from "eslint-plugin-import";
+import * as emberESLint from "eslint-plugin-ember/recommended";
+import importPlugin from "eslint-plugin-import-x";
 import pluginJest from "eslint-plugin-jest";
 import pluginJestDom from "eslint-plugin-jest-dom";
+import { configs as litConfigs } from "eslint-plugin-lit";
 import perfectionist from "eslint-plugin-perfectionist";
 import playwright from "eslint-plugin-playwright";
-import pluginReact from "eslint-plugin-react";
+import { qwikEslint9Plugin } from "eslint-plugin-qwik";
+// import pluginReact from "eslint-plugin-react";
 import pluginReactHooks from "eslint-plugin-react-hooks";
+import solid from "eslint-plugin-solid";
+import svelte from "eslint-plugin-svelte";
 import testingLibrary from "eslint-plugin-testing-library";
+import pluginVue from "eslint-plugin-vue";
 import globals from "globals";
+import svelteParser from "svelte-eslint-parser";
 import tseslint from "typescript-eslint";
 
-// Fix for Bun and eslint-plugin-perfectionist.
-if (!Array.prototype.toSorted) {
-  Array.prototype.toSorted = function (compareFn) {
-    return [...this].sort(compareFn);
-  };
-}
+import svelteConfig from "./svelte.config.js";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
     ignores: [
       ".astro/*",
+      ".claude/*",
+      ".integrations/",
       "dist/*",
       "node_modules/*",
       "output/*",
@@ -39,24 +45,32 @@ export default [
     ...playwright.configs["flat/recommended"],
     files: ["test/e2e/**/*.{js,mjs,cjs,ts,jsx,tsx,md}"],
   },
-  { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  ...eslintPluginAstro.configs.recommended,
   {
-    ...pluginReact.configs.flat.recommended,
-    ...pluginReact.configs.flat["jsx-runtime"],
-    files: [
-      "src/framework/react/**/*.{js,ts,jsx,tsx}",
-      "test/integration/react/**/*.{js,ts,jsx,tsx}",
-    ],
-    settings: {
-      react: {
-        version: "detect",
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
       },
     },
   },
+  pluginJs.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...eslintPluginAstro.configs.recommended,
+  // {
+  //   ...pluginReact.configs.flat.recommended,
+  //   ...pluginReact.configs.flat["jsx-runtime"],
+  //   files: [
+  //     "src/framework/react/**/*.{js,ts,jsx,tsx}",
+  //     "test/integration/react/**/*.{js,ts,jsx,tsx}",
+  //   ],
+  //   settings: {
+  //     react: {
+  //       version: "detect",
+  //     },
+  //   },
+  // },
   {
+    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
     plugins: {
       "react-hooks": pluginReactHooks,
     },
@@ -136,4 +150,106 @@ export default [
       "perfectionist/sort-imports": ["off"],
     },
   },
+  ...pluginVue.configs["flat/recommended"].map((config) => ({
+    ...config,
+    files: ["src/framework/vue/**/*.{js,ts,vue}"],
+    rules: {
+      ...config.rules,
+      "vue/html-self-closing": "off",
+      "vue/max-attributes-per-line": "off",
+      "vue/multi-word-component-names": "off",
+      "vue/singleline-html-element-content-newline": "off",
+    },
+  })),
+  {
+    files: ["**/*.vue"],
+    languageOptions: {
+      parser: pluginVue.parser,
+      parserOptions: {
+        extraFileExtensions: [".vue"],
+        parser: tseslint.parser,
+        sourceType: "module",
+      },
+    },
+  },
+  ...angular.configs.tsRecommended.map((config) => ({
+    ...config,
+    files: ["src/framework/angular/**/*.{ts,html}"],
+    rules: {
+      ...config.rules,
+      "@angular-eslint/no-input-rename": "off",
+    },
+  })),
+  ...svelte.configs["flat/recommended"].map((config) => ({
+    ...config,
+    files: ["**/*.svelte"],
+    languageOptions: {
+      ...config.languageOptions,
+      parser: svelteParser,
+      parserOptions: {
+        ...config.languageOptions?.parserOptions,
+        extraFileExtensions: [".svelte"],
+        parser: tseslint.parser,
+        svelteConfig,
+      },
+    },
+  })),
+  // {
+  //   files: ["src/framework/preact/**/*.{js,ts,jsx,tsx}"],
+  //   languageOptions: {
+  //     globals: {
+  //       ...globals.browser,
+  //     },
+  //     parserOptions: {
+  //       ecmaFeatures: {
+  //         jsx: true,
+  //       },
+  //     },
+  //   },
+  //   rules: {
+  //     ...preactConfig.rules,
+  //   },
+  //   settings: {
+  //     react: {
+  //       version: "19.0",
+  //     },
+  //   },
+  // },
+  {
+    ...solid.configs["flat/recommended"],
+    files: ["src/framework/solid/**/*.{js,ts,jsx,tsx}"],
+  },
+  ...qwikEslint9Plugin.configs.recommended.map((config) => ({
+    ...config,
+    files: [
+      "src/framework/qwik/**/*.{js,ts,jsx,tsx}",
+      "test/integration/qwik/**/*.{js,ts,jsx,tsx}",
+    ],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  })),
+  {
+    files: [
+      "src/framework/qwik/**/*.{js,ts,jsx,tsx}",
+      "test/integration/qwik/**/*.{js,ts,jsx,tsx}",
+    ],
+    rules: {
+      "react-hooks/rules-of-hooks": "off",
+      "testing-library/no-node-access": "off",
+    },
+  },
+  litConfigs["flat/recommended"],
+  {
+    ...emberESLint.base,
+    files: [
+      "src/framework/ember/**/*.{js,ts,gjs,gts}",
+      "test/integration/ember/**/*.{js,ts,gjs,gts}",
+    ],
+  },
+  emberESLint.gjs,
+  emberESLint.gts,
 ];

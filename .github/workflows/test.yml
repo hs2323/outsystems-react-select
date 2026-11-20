@@ -8,7 +8,7 @@ on:
     - cron: '0 12 * * *'
 
 env:
-  NODE_VERSION: '24.13.0'
+  NODE_VERSION: '24.21.0'
 
 jobs:
 
@@ -17,14 +17,15 @@ jobs:
 
     steps:  
       - name: Checkout code
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v7.0.1
 
       - name: Use Node.js
-        uses: actions/setup-node@v6.2.0
+        uses: actions/setup-node@v7.0.0
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install dependencies
+        working-directory: template
         run: npm ci
 
       - name: Run format
@@ -35,14 +36,15 @@ jobs:
 
     steps:  
       - name: Checkout code
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v7.0.1
 
       - name: Use Node.js
-        uses: actions/setup-node@v6.2.0
+        uses: actions/setup-node@v7.0.0
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install dependencies
+        working-directory: template
         run: npm ci
 
       - name: Run lint
@@ -53,28 +55,29 @@ jobs:
 
     steps:  
       - name: Checkout code
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v7.0.1
 
       - name: Use Node.js
-        uses: actions/setup-node@v6.2.0
+        uses: actions/setup-node@v7.0.0
         with:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install dependencies
+        working-directory: template
         run: npm ci
 
       - name: Run security check
-        run: npm run audit
+        run: npm audit
 
   test:
     runs-on: ubuntu-latest
 
     steps:  
       - name: Checkout code
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v7.0.1
 
       - name: Use Node.js
-        uses: actions/setup-node@v6.2.0
+        uses: actions/setup-node@v7.0.0
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -89,10 +92,10 @@ jobs:
 
     steps:  
       - name: Checkout code
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v7.0.1
 
       - name: Use Node.js
-        uses: actions/setup-node@v6.2.0
+        uses: actions/setup-node@v7.0.0
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -110,10 +113,10 @@ jobs:
 
     steps:  
       - name: Checkout code
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v7.0.1
 
       - name: Use Node.js
-        uses: actions/setup-node@v6.2.0
+        uses: actions/setup-node@v7.0.0
         with:
           node-version: ${{ env.NODE_VERSION }}
 

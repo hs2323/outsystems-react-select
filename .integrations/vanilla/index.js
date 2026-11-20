@@ -1,0 +1,47 @@
+const VIRTUAL_SERVER_ID = "virtual:islands/vanilla/server-with-filter";
+const RESOLVED_VIRTUAL_SERVER_ID = `\0${VIRTUAL_SERVER_ID}`;
+function getRenderer(filtered) {
+    return {
+        clientEntrypoint: "islands-integrations/vanilla/client",
+        name: "islands/vanilla",
+        serverEntrypoint: filtered
+            ? VIRTUAL_SERVER_ID
+            : "islands-integrations/vanilla/server",
+    };
+}
+export const getContainerRenderer = () => getRenderer(false);
+export default function (options = {}) {
+    const { exclude, include } = options;
+    const filtered = !!(include?.length || exclude?.length);
+    return {
+        hooks: {
+            "astro:config:setup": ({ addRenderer, updateConfig }) => {
+                addRenderer(getRenderer(filtered));
+                updateConfig({
+                    vite: filtered
+                        ? {
+                            plugins: [
+                                {
+                                    load(id) {
+                                        if (id !== RESOLVED_VIRTUAL_SERVER_ID)
+                                            return;
+                                        return [
+                                            `import { createRenderer } from "islands-integrations/vanilla/server";`,
+                                            `export default createRenderer(${JSON.stringify(include)}, ${JSON.stringify(exclude)});`,
+                                        ].join("\n");
+                                    },
+                                    name: "islands/vanilla/filter",
+                                    resolveId(id) {
+                                        if (id === VIRTUAL_SERVER_ID)
+                                            return RESOLVED_VIRTUAL_SERVER_ID;
+                                    },
+                                },
+                            ],
+                        }
+                        : {},
+                });
+            },
+        },
+        name: "islands/vanilla",
+    };
+}

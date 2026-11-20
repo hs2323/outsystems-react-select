@@ -25,7 +25,6 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install dependencies
-        working-directory: template
         run: npm ci
 
       - name: Run format
@@ -44,7 +43,6 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install dependencies
-        working-directory: template
         run: npm ci
 
       - name: Run lint
@@ -63,7 +61,6 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install dependencies
-        working-directory: template
         run: npm ci
 
       - name: Run security check

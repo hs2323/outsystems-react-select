@@ -6,7 +6,7 @@ on:
       - '*'
 
 env:
-  NODE_VERSION: '24.13.0'
+  NODE_VERSION: '26.13.1'
 
 jobs:
 
@@ -15,10 +15,10 @@ jobs:
 
     steps:  
       - name: Checkout code
-        uses: actions/checkout@v6.0.1
+        uses: actions/checkout@v7.0.1
       
       - name: Use Node.js
-        uses: actions/setup-node@v6.2.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version: ${{ env.NODE_VERSION }}
 
@@ -32,7 +32,7 @@ jobs:
         run: npm run output
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v6.0.0
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: generated-build
           path: output/

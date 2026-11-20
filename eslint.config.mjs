@@ -3,29 +3,24 @@ import pluginJs from "@eslint/js";
 import markdown from "@eslint/markdown";
 import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginAstro from "eslint-plugin-astro";
-import importPlugin from "eslint-plugin-import";
+import importPlugin from "eslint-plugin-import-x";
 import pluginJest from "eslint-plugin-jest";
 import pluginJestDom from "eslint-plugin-jest-dom";
 import perfectionist from "eslint-plugin-perfectionist";
 import playwright from "eslint-plugin-playwright";
-import pluginReact from "eslint-plugin-react";
+// import pluginReact from "eslint-plugin-react";
 import pluginReactHooks from "eslint-plugin-react-hooks";
 import testingLibrary from "eslint-plugin-testing-library";
 import globals from "globals";
 import tseslint from "typescript-eslint";
-
-// Fix for Bun and eslint-plugin-perfectionist.
-if (!Array.prototype.toSorted) {
-  Array.prototype.toSorted = function (compareFn) {
-    return [...this].sort(compareFn);
-  };
-}
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
     ignores: [
       ".astro/*",
+      ".claude/*",
+      ".integrations/",
       "dist/*",
       "node_modules/*",
       "output/*",
@@ -39,24 +34,32 @@ export default [
     ...playwright.configs["flat/recommended"],
     files: ["test/e2e/**/*.{js,mjs,cjs,ts,jsx,tsx,md}"],
   },
-  { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  ...eslintPluginAstro.configs.recommended,
   {
-    ...pluginReact.configs.flat.recommended,
-    ...pluginReact.configs.flat["jsx-runtime"],
-    files: [
-      "src/framework/react/**/*.{js,ts,jsx,tsx}",
-      "test/integration/react/**/*.{js,ts,jsx,tsx}",
-    ],
-    settings: {
-      react: {
-        version: "detect",
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
       },
     },
   },
+  pluginJs.configs.recommended,
+  ...tseslint.configs.recommended,
+  ...eslintPluginAstro.configs.recommended,
+  // {
+  //   ...pluginReact.configs.flat.recommended,
+  //   ...pluginReact.configs.flat["jsx-runtime"],
+  //   files: [
+  //     "src/framework/react/**/*.{js,ts,jsx,tsx}",
+  //     "test/integration/react/**/*.{js,ts,jsx,tsx}",
+  //   ],
+  //   settings: {
+  //     react: {
+  //       version: "detect",
+  //     },
+  //   },
+  // },
   {
+    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
     plugins: {
       "react-hooks": pluginReactHooks,
     },
@@ -134,6 +137,16 @@ export default [
   {
     rules: {
       "perfectionist/sort-imports": ["off"],
+    },
+  },
+  {
+    files: [
+      "src/framework/qwik/**/*.{js,ts,jsx,tsx}",
+      "test/integration/qwik/**/*.{js,ts,jsx,tsx}",
+    ],
+    rules: {
+      "react-hooks/rules-of-hooks": "off",
+      "testing-library/no-node-access": "off",
     },
   },
 ];

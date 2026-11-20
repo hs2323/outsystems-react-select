@@ -1,10 +1,13 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import dotenv from "dotenv";
 import beautify from "js-beautify";
 dotenv.config();
 
 const { html: beautifyHtml } = beautify;
+
+/** The output files whose contents can carry an asset path. */
+const ASSET_PATH_EXTENSIONS = [".html", ".js"];
 
 /**
  * Recursively deletes a directory.
@@ -83,11 +86,11 @@ function formatAstroIslandAttributes(html: string): string {
     const decoded = attrs.replace(/&quot;/g, '""');
 
     // Split attributes by whitespace
-    const formattedAttrs: string = decoded
+    const formattedAttrs = decoded
       .trim()
       .split(/\s+/)
       .filter(Boolean)
-      .map((attr: string): string => `  ${attr}`) // indent each attr
+      .map((attr: string) => `  ${attr}`) // indent each attr
       .join("\n");
 
     return `<astro-island\n${formattedAttrs}>`;
@@ -100,14 +103,26 @@ function formatAstroIslandAttributes(html: string): string {
 function getAllFilesWithExtension(dir: string, ext: string): string[] {
   let results: string[] = [];
 
+  if (!fs.existsSync(dir)) return results;
+
   for (const file of fs.readdirSync(dir)) {
     const filePath = path.join(dir, file);
     const stat = fs.statSync(filePath);
 
     if (stat.isDirectory()) {
       results = results.concat(getAllFilesWithExtension(filePath, ext));
-    } else if (filePath.endsWith(ext)) {
-      results.push(filePath);
+    } else {
+      // Check if it ends with the extension (e.g., .js)
+      // AND does not contain the string ".astro"
+      const isTargetExtension = filePath.endsWith(ext);
+      const isAstroInternal = file.includes(".astro");
+
+      if (isTargetExtension && !isAstroInternal) {
+        results.push(filePath);
+      } else if (isTargetExtension && isAstroInternal) {
+        // Optional: Log what we are filtering out for peace of mind
+        console.log(`🚫 Filtering out internal Astro script: ${file}`);
+      }
     }
   }
 
@@ -143,16 +158,32 @@ function keepAstroIslands(html: string): string {
   return islands.join("\n");
 }
 
-function prefixAssetPathsInFile(filePath: string) {
-  const ASSET_PATH = process.env.ASSET_PATH || "";
+function prefixAssetPathsInFile(filePath: string, assetPath: string) {
   let content = fs.readFileSync(filePath, "utf-8");
 
-  // Replace "/assets/..." inside string literals with prefixed path
-  // Match quotes + /assets/ at start of string
-  content = content.replace(/(["'`])\/assets\//g, `$1/${ASSET_PATH}/`);
+  // Replace "/assets/..." inside string literals and island attributes with
+  // the prefixed path. Match quotes + /assets/ at start of string
+  content = content.replace(/(["'`])\/assets\//g, `$1/${assetPath}/`);
 
   fs.writeFileSync(filePath, content, "utf-8");
   console.log(`Prefixed asset paths in ${filePath}`);
+}
+
+/**
+ * Rewrites the asset paths in everything that carries one: the island markup
+ * as well as the JavaScript it loads.
+ */
+function processAllAssetPaths(dir: string, assetPath: string) {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      processAllAssetPaths(fullPath, assetPath);
+    } else if (ASSET_PATH_EXTENSIONS.some((ext) => entry.name.endsWith(ext))) {
+      prefixAssetPathsInFile(fullPath, assetPath);
+    }
+  }
 }
 
 /**
@@ -186,26 +217,14 @@ function processAllHTML(inputDir: string, outputDir: string): void {
     });
 
     const prettyHtml = formatAstroIslandAttributes(beautified);
+    const innerStringifiedHtml = stringifyAstroIslandContents(prettyHtml);
 
     ensureDirExists(path.dirname(outputFile));
-    fs.writeFileSync(outputFile, prettyHtml, "utf-8");
+    fs.writeFileSync(outputFile, innerStringifiedHtml, "utf-8");
 
     console.log(
       `✅ Processed HTML: ${path.relative(inputDir, inputFile)} → ${path.relative(outputDir, outputFile)}`,
     );
-  }
-}
-
-function processAllJsFiles(dir: string) {
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
-
-  for (const entry of entries) {
-    const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      processAllJsFiles(fullPath);
-    } else if (entry.name.endsWith(".js")) {
-      prefixAssetPathsInFile(fullPath);
-    }
   }
 }
 
@@ -237,13 +256,107 @@ function processOutput() {
   console.log("📦 Copying assets...");
   copyDirectory(assetsSrc, assetsDest);
 
+  console.log("📝 Listing resources...");
+  writeResourcesList(assetsDest, path.join(outputDir, "resources.txt"));
+
   console.log("📜 Copying JavaScript files...");
   copyAllJSFiles(inputDir, outputDir);
 
-  console.log("📜 Processing asset paths...");
-  processAllJsFiles("output");
+  const assetPath = process.env.ASSET_PATH || "";
+  if (assetPath) {
+    console.log("📜 Processing asset paths...");
+    processAllAssetPaths(outputDir, assetPath);
+  } else {
+    console.log("⏭️ Skipping asset paths: ASSET_PATH is not set in .env");
+  }
 
   console.log("✅ Done!");
+}
+
+/**
+ * Stringifies the inner contents of astro-islands for exporting to OutSystems.
+ * @param html
+ * @returns
+ */
+function stringifyAstroIslandContents(html: string): string {
+  return html.replace(
+    /(<astro-island\b[^>]*>)([\s\S]*?)(<\/astro-island>)/gi,
+    (_match, openTag, inner, closeTag) => {
+      const cleanedInner = inner.replace(/<!--\s*astro:end\s*-->/gi, "");
+
+      // Trim leading/trailing newlines
+      const trimmed = cleanedInner.replace(/^\s+|\s+$/g, "");
+
+      const lines = trimmed.split(/\r?\n/);
+
+      const stringified = lines
+        .map((line: string, index: number) => {
+          const escaped = line
+            .replace(/\\/g, "\\\\") // escape backslashes first
+            .replace(/"/g, '""'); // escape quotes
+
+          // No trailing + on the last line
+          return index === lines.length - 1 ? `"${escaped}"` : `"${escaped}" +`;
+        })
+        .join("\n");
+
+      return `${openTag}\n${stringified}\n${closeTag}`;
+    },
+  );
+}
+
+/**
+ * Converts an asset file name to the name OutSystems gives it once imported
+ * as a resource: the first 50 characters, with dots turned into underscores,
+ * other invalid characters removed and no leading underscore.
+ * For example, app-vue.3k9xq2mz.js → appvue_3k9xq2mz_js
+ */
+function toResourceName(fileName: string): string {
+  return fileName
+    .slice(0, 50)
+    .replace(/\./g, "_")
+    .replace(/[^A-Za-z0-9_]/g, "")
+    .replace(/^_+/, "");
+}
+
+/**
+ * Writes the URL expression of every asset, joined by spaces, to the
+ * resources.txt file for the DeployResources action in OutSystems.
+ */
+function writeResourcesList(assetsDir: string, outputFile: string): void {
+  if (!fs.existsSync(assetsDir)) {
+    console.warn(`⚠️ Assets directory not found: ${assetsDir}`);
+    return;
+  }
+
+  // Sorted the way OutSystems lists resources: ignoring case and underscores
+  const sortKey = (name: string) => name.replace(/_/g, "").toLowerCase();
+  const resourceNames = fs
+    .readdirSync(assetsDir, { withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => toResourceName(entry.name))
+    .sort(
+      (a, b) =>
+        sortKey(a).localeCompare(sortKey(b), "en") || a.localeCompare(b, "en"),
+    );
+
+  const duplicates = resourceNames.filter(
+    (name, index) => resourceNames.indexOf(name) !== index,
+  );
+  if (duplicates.length > 0) {
+    console.warn(
+      `⚠️ Assets share a resource name: ${[...new Set(duplicates)].join(", ")}`,
+    );
+  }
+
+  const expression = resourceNames
+    .map((name) => `Resources.${name}.URL`)
+    .join(' + " " +\n');
+
+  fs.writeFileSync(outputFile, `${expression}\n`, "utf-8");
+  console.log(
+    `📝 Wrote ${resourceNames.length} resources to ${path.basename(outputFile)}`,
+  );
 }
 
 processOutput();

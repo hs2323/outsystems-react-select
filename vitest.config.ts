@@ -1,20 +1,13 @@
 /// <reference types="vitest" />
 import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 
-export default defineConfig({
+export default defineConfig(async () => ({
   test: {
     projects: [
       {
-        plugins: [
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          react() as any,
-          tsconfigPaths({
-            projects: ["tsconfig.json"],
-          }),
-        ],
-
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        plugins: [react() as any],
         test: {
           environment: "happy-dom",
           globals: true,
@@ -35,4 +28,4 @@ export default defineConfig({
     ],
     reporters: ["default"],
   },
-});
+}));

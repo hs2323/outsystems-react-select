@@ -38,7 +38,7 @@ const menuShouldBlockScroll = false;
 const menuShouldScrollIntoView = false;
 const minMenuHeight = 140;
 const name = "select-name";
-const openMenuOnClick = false;
+const openMenuOnClick = true;
 const openMenuOnFocus = false;
 const options = [
   { label: 'Chocolate', value: 'chocolate' },
@@ -52,11 +52,234 @@ const tabSelectsValue = false;
 const unstyled = false;
 const value = [{ label: 'Chocolate', value: 'chocolate' },{ label: 'Strawberry', value: 'strawberry' }];
 ---
-<script is:inline>
-    document.onSelectChange = (option) => {
-        console.log('Options selected: ', option);
-    };
-</script>
+<html lang="en">
+<head>
+    <script is:inline>
+        // Island -> host: OutSystems binds the handler by name on window.
+        window.onSelectChange = (selected) => {
+            console.log("Options selected: ", selected);
+            const output = document.getElementById("host-received");
+            if (output) output.textContent = selected;
+            const chips = document.getElementById("host-received-chips");
+            if (!chips) return;
+            const options = JSON.parse(selected);
+            chips.replaceChildren(
+                ...(options.length
+                    ? options.map((option) => {
+                          const chip = document.createElement("span");
+                          chip.className = "chip";
+                          chip.textContent = option.label;
+                          return chip;
+                      })
+                    : [Object.assign(document.createElement("span"), {
+                          className: "chips-empty",
+                          textContent: "Empty selection",
+                      })]),
+            );
+        };
+
+        // Host -> island: like the Islands module when an OutSystems input
+        // parameter changes, set `ssr` (the renderer only renders while it is
+        // present) and then the serialized `props`, which re-renders the
+        // component with the new props.
+        window.setSelectValue = (values) => {
+            const island = document.querySelector("astro-island[component-url*='Select']");
+            if (!island) return;
+            const props = JSON.parse(island.getAttribute("props") || "{}");
+            props.value = [
+                1,
+                values.map((option) => [
+                    0,
+                    { label: [0, option.label], value: [0, option.value] },
+                ]),
+            ];
+            island.setAttribute("ssr", "");
+            island.setAttribute("props", JSON.stringify(props));
+        };
+    </script>
+    <style is:global>
+        :root {
+            --bg: #f4f5f9;
+            --surface: #ffffff;
+            --text: #1f2330;
+            --muted: #636a7d;
+            --border: #e1e4ec;
+            --host: #c8102e;
+            --host-soft: #fdecee;
+            --island: #087ea4;
+            --island-soft: #e6f4f9;
+            --code-bg: #f7f8fb;
+            color-scheme: light;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #14161c;
+                --surface: #1d2029;
+                --text: #e8eaf0;
+                --muted: #9aa1b2;
+                --border: #2e3240;
+                --host: #ff5a6e;
+                --host-soft: #3a1c22;
+                --island: #4fc3e8;
+                --island-soft: #14303b;
+                --code-bg: #171a22;
+                color-scheme: dark;
+            }
+        }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.5;
+        }
+        .demo {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 32px 16px 48px;
+        }
+        .demo-header h1 {
+            margin: 0;
+            font-size: 1.75rem;
+        }
+        .demo-header p {
+            margin: 4px 0 24px;
+            color: var(--muted);
+        }
+        .demo-grid {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            align-items: start;
+        }
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+            overflow: visible;
+        }
+        .panel-host { border-top: 4px solid var(--host); }
+        .panel-island { border-top: 4px solid var(--island); }
+        .panel-heading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .panel-heading h2 {
+            margin: 0;
+            font-size: 1rem;
+        }
+        .panel-body {
+            padding: 20px;
+            display: grid;
+            gap: 20px;
+        }
+        .badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 2px 8px;
+            border-radius: 999px;
+        }
+        .badge-host { background: var(--host-soft); color: var(--host); }
+        .badge-island { background: var(--island-soft); color: var(--island); }
+        .field { display: grid; gap: 8px; }
+        .field-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--muted);
+        }
+        .button-row { display: flex; flex-wrap: wrap; gap: 8px; }
+        .btn {
+            font: inherit;
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--host);
+            background: var(--host);
+            color: #fff;
+            cursor: pointer;
+            transition: filter 0.15s, transform 0.05s;
+        }
+        .btn:hover { filter: brightness(1.08); }
+        .btn:active { transform: translateY(1px); }
+        .btn:focus-visible { outline: 2px solid var(--host); outline-offset: 2px; }
+        .btn-ghost { background: transparent; color: var(--host); }
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            min-height: 28px;
+            align-items: center;
+        }
+        .chip {
+            background: var(--host-soft);
+            color: var(--host);
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 999px;
+        }
+        .chips-empty { color: var(--muted); font-size: 0.85rem; font-style: italic; }
+        .payload {
+            margin: 0;
+            padding: 10px 12px;
+            min-height: 1.5em;
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--muted);
+        }
+        /* react-select keeps its own light styling, so keep its text dark in
+           dark mode too (the tag remove icons inherit this colour). */
+        .custom-select { color: #1f2330; }
+        .payload code:empty::before { content: "[ ]"; opacity: 0.6; }
+    </style>
+</head>
+<body>
+    <main class="demo">
+        <header class="demo-header">
+            <h1>React Select</h1>
+            <p>Changes flow both ways between the host page and the island.</p>
+        </header>
+        <div class="demo-grid">
+            <section class="panel panel-host" aria-labelledby="host-title">
+                <div class="panel-heading">
+                    <span class="badge badge-host">Host</span>
+                    <h2 id="host-title">OutSystems simulation</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="field">
+                        <span class="field-label">Set value from host</span>
+                        <div class="button-row">
+                            <button class="btn" id="host-set-vanilla" type="button" onclick="window.setSelectValue([{ label: 'Vanilla', value: 'vanilla' }])">Vanilla</button>
+                            <button class="btn" id="host-set-all" type="button" onclick="window.setSelectValue([{ label: 'Chocolate', value: 'chocolate' }, { label: 'Strawberry', value: 'strawberry' }, { label: 'Vanilla', value: 'vanilla' }])">All</button>
+                            <button class="btn btn-ghost" id="host-clear" type="button" onclick="window.setSelectValue([])">Clear</button>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <span class="field-label">Received from island</span>
+                        <div class="chips" id="host-received-chips" aria-live="polite">
+                            <span class="chips-empty">Nothing yet. Change the selection.</span>
+                        </div>
+                        <pre class="payload"><code id="host-received"></code></pre>
+                    </div>
+                </div>
+            </section>
+            <section class="panel panel-island" aria-labelledby="island-title">
+                <div class="panel-heading">
+                    <span class="badge badge-island">Island</span>
+                    <h2 id="island-title">React component</h2>
+                </div>
+                <div class="panel-body">
 <SelectComponent
     ariaErrormessage={ariaErrorMessage}
     ariaInvalid={ariaInvalid}
@@ -107,3 +330,9 @@ const value = [{ label: 'Chocolate', value: 'chocolate' },{ label: 'Strawberry',
     unstyled={unstyled}
     value={value}
    />
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

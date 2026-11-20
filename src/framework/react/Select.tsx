@@ -1,3 +1,5 @@
+/** @jsxImportSource react */
+import { useState } from "react";
 import Select from "react-select";
 import type { MultiValue, SingleValue } from "react-select";
 
@@ -102,12 +104,34 @@ const ReactSelect: React.FC<ReactSelectProps> = ({
   unstyled,
   value,
 }) => {
+  // react-select is controlled through `value`, so the selection is kept in
+  // state. When the host (OutSystems) sends a different `value`, the island is
+  // re-rendered into the same React root with new props and the state is reset
+  // to it. The comparison is by content so a re-render with an equal value does
+  // not discard what the user has selected.
+  const [selected, setSelected] = useState<
+    MultiValue<OptionType> | SingleValue<OptionType> | undefined
+  >(value ?? defaultValue);
+  const valueKey = JSON.stringify(value ?? null);
+  const [previousValueKey, setPreviousValueKey] = useState(valueKey);
+  if (valueKey !== previousValueKey) {
+    setPreviousValueKey(valueKey);
+    setSelected(value ?? null);
+  }
+
   const handleChange = (
     newValue: MultiValue<OptionType> | SingleValue<OptionType>,
   ) => {
-    const newValues = Array.isArray(newValue) ? newValue : [newValue];
-    // @ts-expect-error TS2538 Ignore missing onSelectChange
-    document[onSelectChange](JSON.stringify(newValues));
+    setSelected(newValue);
+    if (!onSelectChange) return;
+    const newValues = Array.isArray(newValue)
+      ? newValue
+      : newValue
+        ? [newValue]
+        : [];
+    // OutSystems binds handlers by name on the window object.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any)[onSelectChange]?.(JSON.stringify(newValues));
   };
   return (
     <Select
@@ -127,7 +151,6 @@ const ReactSelect: React.FC<ReactSelectProps> = ({
       controlShouldRenderValue={controlShouldRenderValue}
       defaultInputValue={defaultInputValue}
       defaultMenuIsOpen={defaultMenuIsOpen}
-      defaultValue={defaultValue}
       delimiter={delimiter}
       escapeClearsValue={escapeClearsValue}
       form={form}
@@ -157,7 +180,7 @@ const ReactSelect: React.FC<ReactSelectProps> = ({
       tabIndex={tabIndex}
       tabSelectsValue={tabSelectsValue}
       unstyled={unstyled}
-      value={value}
+      value={selected}
     />
   );
 };

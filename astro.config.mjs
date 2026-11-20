@@ -10,8 +10,7 @@ const frameworkChunks = {
     "react",
     "react-dom",
     "scheduler",
-    "@astrojs/react",
-    "@nanostores/react"],
+    "@astrojs/react"],
 };
 
 /**

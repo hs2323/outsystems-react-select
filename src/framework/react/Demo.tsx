@@ -1,11 +1,9 @@
 /** @jsxImportSource react */
-import { useStore } from "@nanostores/react";
 import React, { useState } from "react";
 
 import AstroLogo from "../../images/astro.png?url";
 import OutSystemsLogo from "../../images/outsystems.png?url";
 import { Operation, setCounterCount } from "../../lib/setCounterCount";
-import { setupStore } from "../../stores/demo";
 
 interface DemoProps {
   children: React.ReactNode;
@@ -29,11 +27,6 @@ export default function Demo({
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const showParentMessage = () => (window as any)[showMessage](count);
-
-  const store = setupStore("reactStore");
-
-  const nanoStoreValue = useStore(store);
-
   return (
     <>
       {header}
@@ -55,15 +48,6 @@ export default function Demo({
               <button className="card-btn" onClick={showParentMessage}>
                 Send value
               </button>
-            </div>
-          </div>
-        </div>
-        <div className="card">
-          <strong>Nano Stores</strong>
-          <div className="card-content">
-            <div>
-              <strong>Value:</strong>
-              <div id="nanostore">{nanoStoreValue}</div>
             </div>
           </div>
         </div>
